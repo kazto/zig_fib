@@ -14,7 +14,12 @@ pub fn build(b: *std.build.Builder) void {
     lib.addIncludeDir("/usr/local/include");
     lib.addIncludeDir("/usr/include/x86_64-linux-gnu");
     lib.addIncludeDir("/usr/include");
-    _ = lib.installRaw("zig_fib.so", std.build.InstallRawStep.CreateOptions{ .dest_dir = std.build.InstallDir{ .custom = "../"} });
+
+    lib.install();
+    //_ = lib.installRaw("zig_fib.so", std.build.InstallRawStep.CreateOptions{ .dest_dir = std.build.InstallDir{ .custom = "../"} });
+
+    const install_so = b.addSystemCommand(&[_][]const u8{"cp", "./zig-out/lib/libzig_fib.so", "./zig_fib.so"});
+    lib.step.dependOn(&install_so.step);
 
     const main_tests = b.addTest("src/main.zig");
     main_tests.setBuildMode(mode);

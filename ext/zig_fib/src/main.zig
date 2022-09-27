@@ -6,14 +6,16 @@ const ruby = @cImport({
 });
 
 export fn wrap_fib(self: ruby.VALUE, v: ruby.VALUE) callconv(.C) ruby.VALUE {
-    const n: i32 = ruby.FIX2INT(v);
+    const n: i32 = ruby.RB_FIX2INT(v);
     const r: i32 = fib(n);
     _ = self;
-    return ruby.INT2FIX(r);
+    return ruby.RB_INT2FIX(r);
 }
 
+var rb_mZigFib: ruby.VALUE = 0;
+
 export fn Init_zig_fib() void {
-    const rb_mZigFib: ruby.VALUE = ruby.rb_define_module("ZigFib");
+    rb_mZigFib = ruby.rb_define_module("ZigFib");
     ruby.rb_define_module_function(
         rb_mZigFib,
         "fib",
