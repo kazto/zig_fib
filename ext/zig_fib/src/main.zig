@@ -19,7 +19,7 @@ export fn Init_zig_fib() void {
     ruby.rb_define_module_function(
         rb_mZigFib,
         "fib",
-        @ptrCast(fn(...) callconv(.C) ruby.VALUE, wrap_fib),
+        @ptrCast(*const fn(...) callconv(.C) ruby.VALUE, &wrap_fib),
         1
     );
 }
